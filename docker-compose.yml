@@ -1,0 +1,35 @@
+version: "2"
+
+services:
+  nginx:
+    container_name: php_oop_nginx
+    build:
+      context: .
+      dockerfile: .docker/nginx/Dockerfile
+    ports:
+      - "20380:80"
+    volumes:
+      - ./:/var/www
+    links:
+      - php-fpm
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+  php-fpm:
+    container_name: php_oop_php
+    build:
+      context: .
+      dockerfile: .docker/php-fpm/Dockerfile
+    volumes:
+      - ./:/var/www
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+  mysql:
+    container_name: php_oop_mysql
+    image: mysql:8.1
+    ports:
+      - "20306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+    restart: unless-stopped
